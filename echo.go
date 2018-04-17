@@ -9,9 +9,13 @@ import (
 )
 
 type ReflectResponse struct {
-	Code    int
-	Message string
-	Data    map[string]interface{}
+	Code          int
+	Message       string
+	Data          map[string]interface{}
+	Headers       map[string][]string
+	Host          string
+	RemoteHost    string
+	ContentLength int64
 }
 
 var port int
@@ -32,7 +36,16 @@ func main() {
 		for k, v := range vals {
 			kvs[k] = v[0]
 		}
-		json.NewEncoder(w).Encode(&ReflectResponse{0, "ok", kvs})
+
+		response := ReflectResponse{0, "ok", kvs, r.Header, r.Host, r.RemoteAddr, r.ContentLength}
+
+		fmt.Printf("[%s] Response: %+v\n", r.RemoteAddr, response)
+
+		err := json.NewEncoder(w).Encode(&response)
+		if err != nil {
+			errStr := fmt.Sprintf("{\"code\":1,\"message\":\"%v\"}", err)
+			w.Write([]byte(errStr))
+		}
 	})
 
 	http.ListenAndServe(":"+fmt.Sprintf("%d", port), nil)
