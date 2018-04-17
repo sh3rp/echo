@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/signal"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -35,6 +36,15 @@ var port int
 func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	log.Info().Msg("HTTP Echo server - v1.0")
+
+	s := make(chan os.Signal, 1)
+	signal.Notify(s, os.Interrupt)
+	go func() {
+		for sig := range s {
+			log.Error().Msgf("%+v caught, exiting...", sig)
+			os.Exit(0)
+		}
+	}()
 
 	flag.IntVar(&port, "p", 8080, "Port to run reflect server on")
 	flag.Parse()
@@ -92,7 +102,7 @@ func main() {
 	})
 
 	log.Info().Msgf("Listening on port %d", port)
-	http.ListenAndServe(":"+fmt.Sprintf("%d", port), nil)
+	log.Error().Msgf("Exit: %v", http.ListenAndServe(":"+fmt.Sprintf("%d", port), nil))
 }
 
 func writeErr(err error, writer http.ResponseWriter) {

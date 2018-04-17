@@ -1,0 +1,13 @@
+[Unit]
+Description=HTTP Echo service
+After=network.target
+
+[Service]
+Type=simple
+User=echouser
+WorkingDirectory=/home/echouser
+ExecStart=/home/echouser/go/bin/echo -p 80
+Restart=always # or always, on-abort, etc
+
+[Install]
+WantedBy=multi-user.target
