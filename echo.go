@@ -20,7 +20,7 @@ var FORMAT_PARAMETER = "__fmt"
 type ReflectResponse struct {
 	Code    int
 	Message string
-	Data    ReflectData
+	Request ReflectData
 }
 
 type ReflectData struct {
@@ -94,7 +94,7 @@ func main() {
 		response := ReflectResponse{
 			Code:    0,
 			Message: "ok",
-			Data:    data,
+			Request: data,
 		}
 
 		log.Info().Msgf("[%s] Response: %+v\n", r.RemoteAddr, response)
