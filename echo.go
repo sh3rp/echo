@@ -9,9 +9,13 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/go-yaml/yaml"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	edn "gopkg.in/edn.v1"
 )
+
+var FORMAT_PARAMETER = "__fmt"
 
 type ReflectResponse struct {
 	Code    int
@@ -94,8 +98,27 @@ func main() {
 		}
 
 		log.Info().Msgf("[%s] Response: %+v\n", r.RemoteAddr, response)
+		var err error
+		if format, ok := kvs[FORMAT_PARAMETER]; ok {
 
-		err := json.NewEncoder(w).Encode(&response)
+			switch format {
+			case "edn":
+				var data []byte
+				data, err = edn.Marshal(&response)
+				w.Write(data)
+			case "yaml":
+				var data []byte
+				data, err = yaml.Marshal(&response)
+				w.Write(data)
+			case "json":
+				fallthrough
+			default:
+				err = json.NewEncoder(w).Encode(&response)
+			}
+		} else {
+			err = json.NewEncoder(w).Encode(&response)
+		}
+
 		if err != nil {
 			writeErr(err, w)
 		}
