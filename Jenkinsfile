@@ -1,11 +1,13 @@
 node {   
     ws("${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}/") {
-        withEnv(["GOPATH=${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}","GOROOT=/usr/local/go"]) {
-            env.PATH="${GOPATH}/bin:${GOROOT}/bin:$PATH"
+        def root = tool name: 'Go 1.10', type: 'go'
+
+        withEnv(["GOPATH=${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"]) {
+            env.PATH="${GOPATH}/bin:${root}/bin:$PATH"
             
             stage('Checkout'){
                 echo 'Checking out SCM'
-                checkout scm
+                sh 'go get -u github.com/sh3rp/echo'
             }
             
             stage('Pre Test'){
@@ -15,7 +17,7 @@ node {
                 sh 'go get -u github.com/golang/dep/cmd/dep'
                 sh 'go get -u github.com/golang/lint/golint'
                 
-                sh 'cd ${GOPATH} && dep ensure' 
+                sh 'cd ${GOPATH}/src/github.com/sh3rp/echo && dep ensure' 
             }
     
             stage('Test'){
