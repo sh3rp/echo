@@ -16,11 +16,16 @@ import (
 )
 
 var FORMAT_PARAMETER = "__fmt"
+var ECHO_VERSION = "1.0"
 
 type ReflectResponse struct {
-	Code    int
-	Message string
-	Request ReflectData
+	Code      int
+	Message   string
+	Version   string
+	BuildTime string
+	GitCommit string
+	GoVersion string
+	Request   ReflectData
 }
 
 type ReflectData struct {
@@ -38,9 +43,13 @@ type ReflectData struct {
 var port int
 var endpoint string
 
+var BuildTime string
+var GitCommit string
+var GoVersion string
+
 func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
-	log.Info().Msg("HTTP Echo server - v1.0")
+	log.Info().Msgf("Echo - HTTP reflection server - v%s", ECHO_VERSION)
 
 	s := make(chan os.Signal, 1)
 	signal.Notify(s, os.Interrupt)
@@ -94,9 +103,13 @@ func main() {
 		}
 
 		response := ReflectResponse{
-			Code:    0,
-			Message: "ok",
-			Request: data,
+			Code:      0,
+			Message:   "ok",
+			Version:   ECHO_VERSION,
+			BuildTime: BuildTime,
+			GitCommit: GitCommit,
+			GoVersion: GoVersion,
+			Request:   data,
 		}
 
 		log.Info().Msgf("[%s] Response: %+v\n", r.RemoteAddr, response)

@@ -10,29 +10,24 @@ node {
                 sh 'go get -u github.com/sh3rp/echo'
             }
             
-            stage('Pre Test'){
+            stage('Pre Build'){
                 echo 'Pulling Dependencies'
         
                 sh 'go version'
-                sh 'go get -u github.com/golang/dep/cmd/dep'
-                sh 'go get -u github.com/golang/lint/golint'
-                
+                sh 'go get -u github.com/golang/dep/cmd/dep'                
                 sh 'cd ${GOPATH}/src/github.com/sh3rp/echo && dep ensure' 
-            }
-    
-            stage('Test'){
-                sh 'cd $GOPATH && go list ./... | grep -v /vendor/ | grep -v github.com | grep -v golang.org > projectPaths'
-                
-                def paths = sh returnStdout: true, script: """awk '\$0="./src/"\$0' projectPaths"""
-                
-                echo 'Testing'
-                sh """cd $GOPATH && go test -race -cover ${paths}"""
             }
         
             stage('Build'){
                 echo 'Building Executable'
             
-                sh """cd $GOPATH/src/sh3rp/echo && go build -ldflags '-s'"""
+                sh """
+                    export TIME=$(date) &&
+                    export COMMIT=$(git rev-list -1 HEAD) &&
+                    export GOVER=$(go version) &&
+                    cd $GOPATH/src/github.com/sh3rp/echo && 
+                    go build -ldflags '-s -X main.BuildTime=${TIME} -X main.GitCommit=${COMMIT} -X main.GoVersion=${GOVER}'
+                """
             }
             
         }

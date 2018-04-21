@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/go-yaml/yaml"
+  packages = ["."]
+  revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
+  version = "v2.2.1"
+
+[[projects]]
   name = "github.com/rs/zerolog"
   packages = [
     ".",
@@ -12,9 +18,15 @@
   revision = "05eafee0eb17d0150591a8f30f0fa592cc9b7471"
   version = "v1.6.0"
 
+[[projects]]
+  branch = "v1"
+  name = "gopkg.in/edn.v1"
+  packages = ["."]
+  revision = "0dd95ac2dc13958eb6839e2514ad7416c8d9e08e"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c742db632151e0d23cbd21d3715c58fbfd328fec02e2578cd149454be0760185"
+  inputs-digest = "a1007a76f5e8c2a08437ded597eb4396078bb855564ca8af47928a5267559f28"
   solver-name = "gps-cdcl"
   solver-version = 1
