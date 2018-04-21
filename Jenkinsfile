@@ -4,7 +4,10 @@ node {
 
         withEnv(["GOPATH=${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"]) {
             env.PATH="${GOPATH}/bin:${root}/bin:$PATH"
-            
+            env.TIME="date"
+            env.COMMIT="cd ${GOPATH}/src/github.com/sh3rp/echo && git rev-list -1 HEAD"
+            env.GOVERSION="go version"
+
             stage('Checkout'){
                 echo 'Checking out SCM'
                 sh 'go get -u github.com/sh3rp/echo'
@@ -20,13 +23,13 @@ node {
         
             stage('Build'){
                 echo 'Building Executable'
+                echo 'Time: $TIME'
+                echo 'Commit: $COMMIT'
+                echo 'Version: $GOVERSION'
             
                 sh """\
-                    export TIME="\$(date)" && \
-                    export COMMIT="\$(git rev-list -1 HEAD)" && \
-                    export GOVER="\$(go version)" && \
                     cd $GOPATH/src/github.com/sh3rp/echo && \
-                    go build -ldflags '-s -X main.BuildTime=\$TIME -X main.GitCommit=\$COMMIT -X main.GoVersion=\$GOVER' \
+                    go build -ldflags '-s -X main.BuildTime=${TIME} -X main.GitCommit=${COMMIT} -X main.GoVersion=${GOVERSION}' \
                 """
             }
             
