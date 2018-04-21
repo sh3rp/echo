@@ -36,6 +36,7 @@ type ReflectData struct {
 }
 
 var port int
+var endpoint string
 
 func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
@@ -51,10 +52,11 @@ func main() {
 	}()
 
 	flag.IntVar(&port, "p", 8080, "Port to run reflect server on")
+	flag.StringVar(&endpoint, "e", "", "Endpoint to use for the echo")
 	flag.Parse()
 
 	log.Info().Msg("Building HTTP handler")
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc(fmt.Sprintf("/%s", endpoint), func(w http.ResponseWriter, r *http.Request) {
 		kvs := make(map[string]interface{})
 		var vals url.Values
 		switch r.Method {
