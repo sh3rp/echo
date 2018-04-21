@@ -26,7 +26,7 @@ node {
                     export COMMIT=\$(git rev-list -1 HEAD) && \
                     export GOVER=\$(go version) && \
                     cd $GOPATH/src/github.com/sh3rp/echo && \
-                    go build -ldflags '-s -X main.BuildTime=${TIME} -X main.GitCommit=${COMMIT} -X main.GoVersion=${GOVER}' \
+                    go build -ldflags '-s -X main.BuildTime=\$TIME -X main.GitCommit=\$COMMIT -X main.GoVersion=\$GOVER' \
                 """
             }
             
