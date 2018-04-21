@@ -15,7 +15,7 @@ node {
                 sh 'go get -u github.com/golang/dep/cmd/dep'
                 sh 'go get -u github.com/golang/lint/golint'
                 
-                sh 'cd ${GOPATH}/src/sh3rp/echo && dep ensure' 
+                sh 'cd ${GOPATH} && dep ensure' 
             }
     
             stage('Test'){
