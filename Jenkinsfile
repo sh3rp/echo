@@ -25,13 +25,6 @@ node {
                 
                 def paths = sh returnStdout: true, script: """awk '\$0="./src/"\$0' projectPaths"""
                 
-                echo 'Vetting'
-
-                sh """cd $GOPATH && go tool vet ${paths}"""
-
-                echo 'Linting'
-                sh """cd $GOPATH && golint ${paths}"""
-                
                 echo 'Testing'
                 sh """cd $GOPATH && go test -race -cover ${paths}"""
             }
