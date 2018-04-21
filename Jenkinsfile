@@ -23,9 +23,9 @@ node {
         
             stage('Build'){
                 echo 'Building Executable'
-                echo 'Time: $TIME'
-                echo 'Commit: $COMMIT'
-                echo 'Version: $GOVERSION'
+                echo "Time: ${TIME}"
+                echo "Commit: ${COMMIT}"
+                echo "Version: ${GOVERSION}"
             
                 sh """\
                     cd $GOPATH/src/github.com/sh3rp/echo && \
