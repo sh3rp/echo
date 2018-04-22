@@ -5,7 +5,7 @@ node {
         withEnv(["GOPATH=${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"]) {
             env.PATH="${GOPATH}/bin:${root}/bin:$PATH"
             env.TIME = sh(returnStdout: true, script: "date").trim()
-            env.GOVERSION = sh(returnStdout: true, script: "go version | awk '{print $3}'").trim()
+            env.GOVERSION = sh(returnStdout: true, script: "go version | awk '{print \$3}'").trim()
 
             stage('Checkout'){
                 echo 'Checking out SCM'
