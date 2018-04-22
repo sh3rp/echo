@@ -5,7 +5,7 @@ node {
         withEnv(["GOPATH=${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"]) {
             env.PATH="${GOPATH}/bin:${root}/bin:$PATH"
             env.TIME = sh(returnStdout: true, script: "date").trim()
-            env.GOVERSION = sh(returnStdout: true, script: "go version").trim()
+            env.GOVERSION = sh(returnStdout: true, script: "go version | awk '{print $3}'").trim()
 
             stage('Checkout'){
                 echo 'Checking out SCM'
@@ -29,7 +29,7 @@ node {
             
                 sh """\
                     cd $GOPATH/src/github.com/sh3rp/echo && \
-                    go build -ldflags '-s -X main.BuildTime="$TIME" -X main.GitCommit="$COMMIT" -X main.GoVersion="$GOVERSION"' \
+                    go build -ldflags -s "-X main.BuildTime=$TIME" "-X main.GitCommit=$COMMIT" "-X main.GoVersion=$GOVERSION"' \
                 """
             }
             
