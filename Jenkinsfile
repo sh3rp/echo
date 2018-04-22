@@ -29,7 +29,7 @@ node {
             
                 sh """\
                     cd $GOPATH/src/github.com/sh3rp/echo && \
-                    go build -ldflags '-s -X main.BuildTime=${TIME} -X main.GitCommit=${COMMIT} -X main.GoVersion=${GOVERSION}' \
+                    go build -ldflags '-s -X main.BuildTime="$TIME" -X main.GitCommit="$COMMIT" -X main.GoVersion="$GOVERSION"' \
                 """
             }
             
