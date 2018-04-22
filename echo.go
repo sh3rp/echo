@@ -50,6 +50,7 @@ var GoVersion string
 func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	log.Info().Msgf("Echo - HTTP reflection server - v%s", ECHO_VERSION)
+	log.Info().Msgf("Build: commit: %s, time: %s, Go version: %s", GitCommit, BuildTime, GoVersion)
 
 	s := make(chan os.Signal, 1)
 	signal.Notify(s, os.Interrupt)

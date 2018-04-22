@@ -4,7 +4,7 @@ node {
 
         withEnv(["GOPATH=${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"]) {
             env.PATH="${GOPATH}/bin:${root}/bin:$PATH"
-            env.TIME = sh(returnStdout: true, script: "date").trim()
+            env.TIME = sh(returnStdout: true, script: "date -u +%Y-%m-%d.%H:%M:%S").trim()
             env.GOVERSION = sh(returnStdout: true, script: "go version | awk '{print \$3}'").trim()
 
             stage('Checkout'){
