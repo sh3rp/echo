@@ -4,9 +4,9 @@ node {
 
         withEnv(["GOPATH=${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"]) {
             env.PATH="${GOPATH}/bin:${root}/bin:$PATH"
-            env.TIME="date"
-            env.COMMIT="cd ${GOPATH}/src/github.com/sh3rp/echo && git rev-list -1 HEAD"
-            env.GOVERSION="go version"
+            env.TIME = sh(returnStdout: true, script: "date").trim()
+            env.COMMIT = sh(returnStdout: true, script: "cd ${GOPATH}/src/github.com/sh3rp/echo && git rev-list -1 HEAD").trim()
+            env.GOVERSION = sh(returnStdout: true, script: "go version").trim()
 
             stage('Checkout'){
                 echo 'Checking out SCM'
